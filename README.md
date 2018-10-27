@@ -43,3 +43,4 @@ Please note the copyrights and trademarks in [NOTICE](./NOTICE).
 
 * [allista](https://forum.kerbalspaceprogram.com/index.php?/profile/99885-allista/): Current Maintainer
 	+ [GitHub](https://github.com/allista/AT_Utils)
+
