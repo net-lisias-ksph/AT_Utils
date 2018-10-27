@@ -1,0 +1,27 @@
+{
+	"NAME"		: "AT_Utils /L Unofficial",
+	"URL"		: "https://raw.githubusercontent.com/net-lisias-kspu/AT_Utils/master/AT_Utils.version",
+	"DOWNLOAD"	: "https://github.com/net-lisias-kspu/AT_Utils/releases",
+	"CHANGE_LOG"	: "https://raw.githubusercontent.com/net-lisias-kspu/AT_Utils/master/CHANGE_LOG.md",
+	"CHANGE_LOG_URL": "https://raw.githubusercontent.com/net-lisias-kspu/AT_Utils/master/CHAMGES.md",
+	"VERSION":{
+		"MAJOR":1,
+		"MINOR":6,
+		"PATCH":2,
+		"BUILD":0
+		},
+	"KSP_VERSION":{
+		"MAJOR":1,
+		"MINOR":4
+		},
+	"KSP_VERSION_MIN":{
+		"MAJOR":1,
+		"MINOR":4,
+		"PATCH":1
+		},
+	"KSP_VERSION_MAX":{
+		"MAJOR":1,
+		"MINOR":4,
+		"PATCH":99
+		}
+}

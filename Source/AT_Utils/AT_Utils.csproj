@@ -126,6 +126,9 @@
     <Compile Include="StringID.cs" />
     <Compile Include="Modules\NamedDockingNode.cs" />
     <Compile Include="GUI\Dialogs\SimpleScrollView.cs" />
+    <Compile Include="Properties\Version.cs">
+      <DependentUpon>Version.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -141,5 +144,11 @@
     <Folder Include="GUI\Elements\" />
     <Folder Include="GUI\WindowsFramework\" />
     <Folder Include="Addons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Version.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Version.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>
