@@ -1,5 +1,194 @@
 # AT Utils :: Change Log
 
+* 2019-1221: 1.9.0 (allista) for KSP 1.8.1
+	+ Core:
+		- Added UniversalDrill to BadParts as per @pmborg finding
+		- Fixed singleton implementation of BackupLogger
+		- Fixed singleton implementation of AddonWindowBase
+		- Fixed singleton implementation of ScenarioTester
+		- Fixed singleton implementation of ScenarioTester
+		- Fixed singleton implementation of ComputationBalancer
+		- Added static bool property ComputationBalancer.Running
+		- Moved ComputationBalancer to Addons
+		- Instantiating ToolbarWindow in Awake of the ToolbarManager. Fixed #18
+		- Added IAnimator interface that describes minimal MultiAnimator protocol
+		- ATGroundAnchor uses onPartPack/Unpack GameEvents instead of obsolete methods
+		- Added ability to animate ATGroundAnchor via IAnimator module
+		- Moved ResourceInfo to Resources
+		- ResourcePump.Request is now a public ro property
+		- Part.Title extension method works with part == null
+		- ATMagneticDamper:
+			- Damper holds damped vessels still in TimeWarp
+			- Damper consumes EC when damping something: EnergyConsumptionK
+			- Damper consumes EC when enabled and idle: IdleEnergyConsumption
+			- Renamed magnet to attractor
+			- Attractor power is configurable in flight: AttractorPower
+			- Attractor may be inverted to become repulsive: InvertAttractor
+			- Total force that is applied to a rigid body is capped: MaxForce + MaxEnergyConsumption
+			- Added module info to part tooltip
+			- The layer of the sensor object is set OnStart: 21 in editor, 2 in flight
+			- Added ATMagneticDamperUpdater to APR
+			- When computing relative RB velocity, take angular velocity of the host into account
+			- Added ability to animate working MagneticDamper with an IAnimator module
+			- Does not affect Rigidbodies of the same vessel
+		- VesselSpawner + SpawnSpaceManager:
+			- When setting external SpaceMetric need to update spawn_space_sorted_size
+			- Fixed inability of the VesselSpawner to disable launched vessel colliders on time
+			- Fixed vessel stabilization when spawning to ground
+		- Added frameCount to log message header
+		- DebugUtils.formatTransformTree also prints activeSelf and activeInHierarchy
+		- Moved DEBUG info panel (clock,frameCount,situation) from TCA to TooltipManager
+	+ Anisotropic Part Resizer:
+		- Fixed PAW freezing when resized part was in symmetry group
+			- BREAKING: using BaseField.OnValueModified instead
+		- of UI_Control.onFiledChanged to change size/aspect
+		- Added ATMagneticDamperUpdater
+		- Removed static AnisotropicResizable.unequal
+		- Set caps for breakingForce/Torque to 50k to be closer
+		- to current stock values
+		- Fixed AnizotropicResizable.GetModuleMass/Cost calculations
+			- BREAKING: ResourcesUpdater is IPartCostModifier and only
+		- handles resources present in prefab
+			- BREAKING: In Scale treating aspect like size -- with respect
+		- to original aspect
+		- Fixed NRE in JettisonUpdater
+		- Various small fixes and refactoring
+	+ Multi Animators:
+		- Forward/ReverseSpeed is changed on rescale
+		- In editor slow animations are played in 3s despite their duration
+		- Calculating hasSound and hasEmitter in OnStart once to avoid expencive null check
+		- Renamed ntime to n_time for clarity
+		- Removed redundant override of FixedUpdate in MultiLights
+		- Changed enable/disable light labels in PAW
+		- Corrected typos
+		- Deprecated AnimatedGroundAnchor
+		- Using AT_Utils.IAnimator interface
+* 2019-1130: 1.8.3 (allista) for KSP 1.8.1
+	+ Changed default Min/Max Size/Aspect of APR to [0.1, 1000]
+	+ ToggleAction of MultiAnimators syncs with its action group if it's set
+	+ In MultiGeometryAnimator made drag cube names configurable
+	+ to be able to use predefined cubes.
+	+ Added OnHoverTrigger UI component
+	+ Add the trash icon to at_utils_ui asset bundle
+	+ Added Indicator UI component
+	+ Added ClickableLabel UI component
+	+ Made UIWindowBase.SyncState virtual
+	+ Added UIWindowBase.onGamePause/Unpause virtual methods that are called
+	+ when corresponding GameEvents are fired
+	+ Considering a vessel to be OnPlanet only when its orbit radius is less
+	+ than MinPeR
+	+ Allow for cancellation of a ComputationBalancer.Task
+* 2019-1114: 1.8.2 (allista) for KSP 1.8.1
+	+ Extracted SpatialSensor from SpawnSpaceManager.SpawnSpaceSensor.
+		- Added several factories to add the sensor to GO starting from
+		- different components like MeshFilter or Collider.
+	+ Added on_vessel_positioned callback to VesselSpawner.SpawnProtoVessel
+	+ Ignoring GForces while vessel goes off rails in VesselSpawner
+	+ VesselSpawner calls on_vessel_off_rails before switching to it
+	+ SpawnSpaceManager supports SpawnOffset AND AutoPositionVessel at the same
+		- time.
+	+ Braking change: removed GetSpawnOffset methods. Instead, GetSpawnTransform
+		- returns out spawn_offset parameter.
+	+ Added additional_rotation argument to GetSpawnTransform methods
+	+ Removed AutoPositionVessel option from SpawnSpaceManager
+			- Instead, added GetSpawnRotation and GetOptimalRotation methods that
+				- allow calculation of the rotation that was used when AutoPositionVessel was used.
+			- Renamed additional_rotation argument of GetSpawnTransform to just
+				- rotation.
+	+ Fixed NRE in ToggleColorizer
+	+ Optimized initial positioning of the panel; still doesn't work though)
+	+ Fixed NRE during spawning of a vessel that is quickly destroyed
+	+ Corrected some typos
+	+ Fixed the crash on right click on toolbar buttons
+	+ Fixed NRE when calling SaveState on an Instance that's no longer there
+	+ Hiding subwindows if a parent window is not shown
+	+ Checking for null return value when adding component to a GO
+	+ Better logging from AppToolbar
+	+ Checking for null value when running Show coro of UIWindowBase on a MB
+	+ Initialize UIWindow Controller position without waiting for it to resize
+		- itself, because sometimes it doesn't do this and the waiting is infinite.
+	+ Saving state of a UIWindow when it is closed.
+	+ Added NIGHTBUILD build configuration
+	+ Separated extension classes to their own files under Extensions directory
+	+ Added Part.TryUseResource extension method
+	+ Added Utils.GetLayer/GetLayers method to resolve layer masks from layer
+		- names and cache the results.
+	+ Changed target framework to .NET-4.5
+	+ Added required Unity-2019 Module dlls
+	+ Using new EventType constants
+	+ Using MonoUtilities.RefreshPartContextWindow per SQUAD request
+	+ Fixed ArgumentException and NREs caused by not-found material
+	+ Fixed Additive material path
+	+ Storing background textures for styles in Styles class.
+			- Background textures in Unity 2019 should be persisted outside of the
+				- GUISyleState.background
+	+ Moving GUIContent instances to static members for performance.
+	+ Added Toggle.SetIsOnAndColorWithoutNotify extension.
+* 2019-0617: 1.8.1 (allista) for KSP 1.6
+	+ Made UIBundle reusable for different bundles. Extracted UIWindowBase code from Styles
+		- Derived ColorListWindow from UIWindowBase, both being extracted from Styles; UIWindowBase will be the base for the new UI framework on uGUI.
+		- Added UI folder for the new framework
+	+ Fixed ScreenBoundRect, extracted static ClampToScreen method from OnDrag
+	+ Changed mku to μu in formatUnits
+	+ Fixed references to UnityEngine+.UI; should not make lockal copies of them
+	+ Added PanelledUI and FloatValueUI base classes and FloatController UI prefab
+	+ Added TooltipView+TooltipTrigger framework
+	+ Added AT_Utils.UI.FormatUtils.cs with the code from MiscUtils for formatting
+	+ Added CommonEvents.cs with UnityEvents subclasses for common use
+	+ Added Extensions class and backported Toggle.SetIsOnWithoutNotify
+	+ Added PluginState static class that handles persistent configs
+		- The code was extracted from GUIWindowBase. Now everything that needs to persist its configs have to use PluginState.
+		- For that there are two attributes: ConfigOption for fields and PersistState for classes. The former marks fields that should be saved and restored, the later is used to recursively save/load state of a tree of objects.
+		- Added ICachedState interface to PluginState framework to allow classes to sync their runtime state before saving it to config.xml
+	+ Made ToggleColorizer.UpdateColor public
+		- To change toggle color when isOn is set without calling the callback
+	+ Added TooltipView via TooltipWindow to TooltipManager addon
+	+ Added Label prefab that is a Panel->Text composite
+	+ Fixed DragableRect in case of parents changing midflight
+	+ Fixed DragableRect position calculation; using IBeginDragHandler to catch the start
+	+ Added PanelledUI.IsActive property
+	+ Added EmptyPanel prefab
+	+ Added Panel prefab
+	+ Added ColorSetting.Alpha method to return the Color with changed alpha value
+	+ SpawnSpaceManager adds separate GO for AutoPosition transform
+* 2019-0528: 1.8.0 (allista) for KSP 1.6
+	+ APR: Updating AttachNodes with the model OnLoad
+	+ Added DebugUtils.SetupHullMeshes Vessel extension method.
+		- Fixed ConvexHull3D calculation that added zero vector to the hull in some cases
+	+ SimpleDialog and subclasses accept one-time callbacks
+	+ Added WorldSpaceTrace script to add temporary markers to WorldSpace
+	+ Added BoundTriangles to easily create meshes from BoundCorners output.
+	+ Added Utils.standard_material and comments on how to set up the Standard Unity shader
+		- Reimplemented SimpleDialog and its subclasses to use callbacks and OnGUI
+	+ SimpleScrollView is hidden by default.
+		- SimpleScrollView is drawn in its own OnGUI method.
+	+ Added ButtonSwitch(GUIContent) methods
+* 2019-0514: 1.7.0 (allista) for KSP 1.6
+	+ Added Styles.onSkinInit callback
+	+ Added Styles.ToggleStylesUI MonoBehaviour extension method
+	+ Added Styles.MakeButton(Color) method to unify button creation.
+	+ Added AppToolbar addon to generalize handling of AppLaucher/Toolbar buttons
+	+ Moved ToolbarWrapper to GUI
+	+ Added ConfigNodeObject.SavePartial to programmatically manage .user override files
+	+ GC49 added dmFlexoTube parts to BadParts list
+	+ Removed ResourceHack config
+	+ Added AT_Utils.UI - new UI framework based on uGUI
+	+ Using AT_Utils.UI.Colors framework to change UI colors at runtime
+	+ Moved static CurrentCamera prop from Markers to GraphicsUtils
+	+ Added VectorsityLineRenderer and UnityLineRenderer to simplify 3D-spline usage
+	+ Removed Draw methods using dynamic Meshes
+* 2019-0428: 1.6.3 (allista) for KSP 1.4.5
+	+ Added ShipConstruct.SelectPart(flagURL)
+	+ Added PartMaker to make a part from the name and a ShipConstruct from the part
+		- Added PartSelector: like SubassemblySelector, but selects AvailableParts
+	+ Added Utils.PartIsPurchased(AvailablePart)
+	+ Try and catch everything while creating a part in PartMaker.
+		- Also, consider the possibility of unequal module nodes and modules counts.
+		- And of modules that add other modules (like CC does).
+	+ Safer ForEach extension; fixed NRE in StartState.
+	+ PartSelector uses pagination, async loading and title filter.
+	+ Fixed Out of memory exception in ComputationBalancer on scene change
+	+ ResourcePump.request is double, which fixes some issues with KSP-1.6
 * 2018-1016: 1.6.2 (allista) for KSP 1.4.5
 	+ Added StringID extensions for classes in ksp object's hierarchy.
 		- To better track what happens where during debugging.
@@ -21,9 +210,9 @@
 	+ Added Transform.(Inverse)TransformPointUnscaled extensions
 	+ Fixed VesselSpawner.SpawnShipConstruct positioning.
 	+ Consider disabled renderers when searching for AffectedObjects in STS
-* 2018-0831: 1.6.0.1 (allista) for KSP 1.4.5
+* 2018-0831: 1.6.0.1 (allista) for KSP 1.3.1
 	+ Recompiled against KSP-1.4.5
-* 2018-0615: 1.6.0 (allista) for KSP 1.4.3
+* 2018-0615: 1.6.0 (allista) for KSP 1.3.1
 	+ Added ShipConstructLoader component that loads both complete .crafts and subsassemblies.
 	+ GUIWindowBase.HUD_enabled takes into account level_loaded flag.
 	+ Added SlowUpdate coroutine helper.
@@ -43,7 +232,7 @@
 	+ Added Part.AllModelMeshes extension; used in Metric.
 	+ Added MeshFilter.AddCollider extension; used in SpawnSpaceManager and ATMagneticDamper.
 	+ Added MetricDebug module to visualize both Metric and .Bounds
-* 2018-0510: 1.5.2 (allista) for KSP 1.4.3
+* 2018-0510: 1.5.2 (allista) for KSP 1.3.1
 	+ Added FeedForward input to PID controllers.
 	+ Fixed FCO mode switching without changing the anchor.
 		- Plus, OrbitAround anchors at CoMs of vessels.
@@ -64,7 +253,7 @@
 		- ComputationBalancer computes tasks made as IEnumerables (like coroutines) inside its Update event, trying to keep FPS from dropping too low.
 		- It works in Flight, Editor and KSC, and also when the game is paused.
 		- Also moved ProgressIndicator here from TCA.
-* 2018-0327: 1.5.1 (allista) for KSP 1.4.1
+* 2018-0327: 1.5.1 (allista) for KSP 1.3.1
 	+ Moved HangarSpaceManagers and SubassemblySelector from Hangar here.
 		- Moved all addons to Addons subfolder.
 		- Moved all modules to Modules subfoldre.
@@ -77,7 +266,7 @@
 		- Using ResourceInfo("ElectricCharge") for static EC information.
 		- Added Metric.hull_mesh lazy property.
 		- Converted one-liner methods to expression bodies.
-* 2017-1109: 1.5.0 (allista) for KSP 1.3.1
+* 2017-1109: 1.5.0 (allista) for KSP 1.3
 	+ Using rel pivot distance instead of constant MAX_DIST for LookAt modes.
 	+ OnPlanet uses additional PeR check using Orbit.MinPeR extension.
 	+ Moved AngleTo/DistanceTo/*Pos methods to Coordinates.
@@ -128,7 +317,7 @@
 	+ In SimplePartFilter:
 		- Fixed module matching with moduleInfo.moduleName: Converted MODULES to List of strings that is filled with SetMODULES methods that accepts IEnumerable of Types and converts Type.Name to moduleName/categoryName format.
 		- Added default implementation of the filter method.
-* 2017-0605: 1.4.3 (allista) for KSP 1.3
+* 2017-0605: 1.4.3 (allista) for KSP 1.2.2
 	+ Compatible with KSP-1.3
 	+ Added simple emailer class (works only with local spooler). Added ScenarioTester framework for automated continious testing.
 	+ Changed log message upon scenario registration.
@@ -205,7 +394,7 @@
 	+ Improved GLDrawBounds/Point.
 	+ Fixed Metric calculation: disabled objects are not taken into account + all parts have mass. Fixed #176 issue in Hangar's bugtracker.
 	+ Moved debug routines into Debugging. Added ResourceHack module to replenish resources in flight.
-* 2016-1219: 1.3.0 (allista) for KSP 1.2.2
+* 2016-1219: 1.3.0 (allista) for KSP 1.2
 	+ Compiled against KSP-1.2.2
 	+ Added SerializableFieldsPartModule -- a base PartModule that uses reflection to serialize any field with [SerializeField] attribute that is of either [Serializable] type, or an IConfigNode, or the ConfigNode itself.
 		- So ConfigNodeWrapper is now obsolete.
@@ -228,7 +417,7 @@
 		- Made tooltips light-green with black text for better visibility.
 		- Fixed Part.TotalCost.
 		- Added ShipConstruct.Unload extension.
-* 2016-1113: 1.2.2 (allista) for KSP 1.1.2
+* 2016-1113: 1.2.2 (allista) for KSP 1.2
 	+ Added ClampedAssymetricFilter3D.
 		- Renamed AsymmetricFilter.alpha/Tau[R|F] to [Up|Down].
 	+ Added Min property to Vector6.
@@ -252,7 +441,7 @@
 		- Added ForEach(IList).
 	+ Fixed CNO.NodeName property. Added SaveInto method.
 	+ Updated AT-Utils.netkan file; updated to CC with .netkans.
-* 2016-1026: 1.2.1 (allista) for KSP 1.1.2
+* 2016-1026: 1.2.1 (allista) for KSP 1.2
 	+ Added alternative GLDrawPoint.
 	+ Fixed Utils.SaveGame. Added optional with_message argument.
 	+ Fixed AddonWindowBase configuration saving.
@@ -263,7 +452,7 @@
 	+ LeftRightChooser's width parameter now defines the total width of the controls, not only the field itself.
 	+ Added FloatField.IsSet property. Default formatting is changed to roundtrip. Added separate increment formatting.
 	+ Moved ToolbarWrapper to AT_Utils. Updated it from upstream.
-* 2016-1016: 1.2.0 (allista) for KSP 1.1.2
+* 2016-1016: 1.2.0 (allista) for KSP 1.1.3
 	+ Added KSP_AVC support for CC.
 	+ Excluded CC Parts from library distributive.
 	+ Added Utils.Log2File method.
@@ -278,14 +467,14 @@
 	+ Added Utils.EnableEvent\* group of methods.
 	+ Utils.Log now searches for the first caller method that does not start with Log to get assembly name.
 	+ Moved SimpleTextureSwitcher to AT_Utils and fixed it.
-* 2016-0905: 1.0.2 (allista) for KSP 1.1.2
+* 2016-0905: 1.0.2 (allista) for KSP 1.1.3
 	+ Added OscillationDetector class that detects oscillations in input data in real-time using recursive DCT.
 	+ Renamed Timer.Check property to a more meaningful .TimePassed.
 	+ Added GLDrawPoint, GLDrawHullLines and GLTriangleLines, renamed GLBounds to GLDrawBounds.
 	+ DrawMesh now uses Graphics.DrawMeshNow to instantly draw a mesh OnObjectRender message.
 	+ Added Metric(MeshFilter), Metric(Transform) constructors. Added optional offset vector to FitsAligned methods.
-* 2016-0816: 1.0.1 (allista) for KSP 1.1.2
+* 2016-0816: 1.0.1 (allista) for KSP 1.1.3
 	+ Moved dll-s into Plugins subfolder.
 	+ Added Vector3/d.IsInf and .Invalid (= .IsNan || .IsInf) methods.
-* 2016-0715: 1.0.0 (allista) for KSP 1.1.2
+* 2016-0715: 1.0.0 (allista) for KSP 1.1.3
 	+ This is not a real release, but rather a snapshot of current work in progress. It is needed for CKAN to be able to install the mods that depend on AT_Utils properly.
